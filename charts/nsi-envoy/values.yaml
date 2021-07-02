@@ -1,0 +1,101 @@
+# Default values for nsi-envoy.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: hnstrmprt/nsi-envoy
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+livenessProbe:
+  enabled: true
+  scheme: "HTTP"
+  path: "/"
+  port: 8081
+
+readinessProbe:
+  enabled: true
+  scheme: "HTTP"
+  path: "/"
+  port: 8081
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  name: "nsi-envoy"
+  port: 443
+  containerPort: 8080
+# configure either ClusterIP or LoadBalancer + ipAddress
+#  type: ClusterIP
+  type: LoadBalancer
+  ipAddress: 1.2.3.4
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+
+ingress:
+  enabled: false
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+      - path: /
+        backend:
+          serviceName: chart-example.local
+          servicePort: 80
+  tls:
+    - secretName: chart-example-tls
+      hosts:
+        - chart-example.local
+
+resources:
+  requests:
+    memory: 100Mi
+    cpu: 100m
+  limits:
+    memory: 200Mi
+    cpu: 1000m
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+config:
+  name: "nsi-envoy-config"
+  mountPath: "/opt/bitnami/envoy/conf"
+  configFilesGlob: "config/*"
