@@ -50,12 +50,13 @@ service:
   name: "nsi-envoy"
   port: 443
   containerPort: 8080
-# configure either ClusterIP or LoadBalancer + ipAddress
+# configure either ClusterIP or LoadBalancer + ipAddress + externalTrafficPolicy
 #  type: ClusterIP
   type: LoadBalancer
   ipAddress: 1.2.3.4
-  annotations:
-    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+  externalTrafficPolicy: Cluster
+#  annotations:
+#    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 
 ingress:
   enabled: false
