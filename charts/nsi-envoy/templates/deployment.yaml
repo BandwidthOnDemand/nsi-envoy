@@ -40,8 +40,8 @@ spec:
           args:
             - "-c"
             - "/opt/bitnami/envoy/conf/envoy.yaml"
-#            - "--log-level"
-#            - "debug"
+            - "--log-level"
+            - "debug"
           volumeMounts:
             - name: {{ .Values.config.name }}
               mountPath: {{ .Values.config.mountPath }}
