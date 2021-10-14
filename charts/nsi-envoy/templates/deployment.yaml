@@ -69,7 +69,7 @@ spec:
       volumes:
         - name: {{ .Values.config.name }}
           configMap:
-            name: name: {{ include "nsi-envoy.fullname" . }}-{{ .Values.config.name }}
+            name: {{ include "nsi-envoy.fullname" . }}-{{ .Values.config.name }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
